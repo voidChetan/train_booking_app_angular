@@ -1,0 +1,131 @@
+<div class="container-fluid bg-secondary p-4">
+    <div class="row">
+        <div class="col-4 px-4">
+            <select class="form-select" [(ngModel)]="searchData.fromStationId">
+                @for (item of stationList; track $index) {
+                <option [value]="item.stationID">{{item.stationName}}</option>
+                }
+            </select>
+        </div>
+        <div class="col-4 px-4">
+            <select class="form-select" [(ngModel)]="searchData.toStationId">
+                @for (item of stationList; track $index) {
+                <option [value]="item.stationID">{{item.stationName}}</option>
+                }
+            </select>
+        </div>
+        <div class="col-2 px-2">
+            <input type="text" class="form-control" [(ngModel)]="searchData.dateOfTravel" />
+        </div>
+        <div class="col-2 text-end">
+            <button type="button" class="btn btn-primary btn-sm" (click)="getSearchTrains()">Modify Search</button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-2">
+    <p style="border: 1px solid;padding: 5px;margin-top: 5px;"><strong>{{trainList.length}}</strong> Result Found For
+        <strong>Pune</strong> to <strong>Nagpur</strong> on 12-12-2023</p>
+    <div class="row">
+        @for (item of trainList; track $index) {
+        <div class="col-6 mt-2">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    {{item.trainName}} ({{item.trainNo}})
+                </div>
+                <div class="card-body">
+                    <div class="row pb-2">
+                        <div class="col-5">
+                            {{item.departureTime}} | {{item.departureStationName}} | {{item.departureDate |
+                            date:'dd-MMM-yy'}}
+                        </div>
+                        <div class="col-2">
+                            15:05 hrs
+                        </div>
+                        <div class="col-5 text-end">
+                            {{item.arrivalTime}}| {{item.arrivalStationName}} | {{item.arrivalTime}}
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-sm" (click)="open(item)">Book
+                        Now</button>
+                    <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">Check
+                        Availability</button>
+                </div>
+            </div>
+        </div>
+        }
+
+
+    </div>
+
+    <div class="modal" id="myBookModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Ticket</h5>
+                    <button type="button" class="btn-close" (click)="close()"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-8 text-end">
+                            Train: {{selectedTrain?.trainName}} - {{selectedTrain?.trainNo}}
+                        </div>
+                        <div class="col-4 text-end">
+                            Time: {{selectedTrain?.departureTime}}
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col-6 mt-2">
+                            <label for="">Passenger Name</label>
+                            <input type="text" [(ngModel)]="passenger.passengerName" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="">Age</label>
+                            <input type="text" [(ngModel)]="passenger.age" class="form-control">
+                        </div>
+                        <div class="col-3  text-end pt-4">
+                            <button class="btn btn-sm btn-primary" (click)="addPassenger()">Add</button>
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Sr </th>
+                                        <th>Passenger Name</th>
+                                        <th>Age</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (item of passengerList; track $index) {
+                                        <tr>
+                                            <td>{{$index+1}}</td>
+                                            <td>{{item.passengerName}}</td>
+                                            <td>{{item.age}}</td>
+                                            <td>
+                                                <button class="btn btn-danger btn-sm">Remove</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                  
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" (click)="close()">Close</button>
+                    <button type="button" (click)="bookTicket()" class="btn btn-success btn-sm" data-bs-dismiss="modal">Book Ticket</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
